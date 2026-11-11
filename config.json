@@ -1,0 +1,26 @@
+{
+  "start_date": "2022-01-01",
+  "end_date": "2022-01-31",
+  "data_dir": "data",
+  "eea": {
+    "url": "https://eeadmz1-downloads-api-appservice.azurewebsites.net/ParquetFile",
+    "country": "PL",
+    "city": "Warsaw",
+    "pollutant": "PM10",
+    "dataset": 2
+  },
+  "open_meteo": {
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "latitude": 52.22,
+    "longitude": 21.00,
+    "timezone": "Europe/Warsaw",
+    "hourly": [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "precipitation",
+      "pressure_msl",
+      "wind_speed_10m",
+      "wind_direction_10m"
+    ]
+  }
+}
