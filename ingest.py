@@ -138,11 +138,10 @@ def atomic_save(path, content):
 
 
 def download_eea(db, run_id, config, period_start, period_end):
-    city = config["eea"]["city"]
     country = config["eea"]["country"]
     pollutant = config["eea"]["pollutant"]
     period = f"{period_start:%Y-%m}"
-    path = ROOT / config["data_dir"] / "raw" / "eea" / f"{country}_{city}_{pollutant}_{period}.zip"
+    path = ROOT / config["data_dir"] / "raw" / "eea" / f"{country}_{pollutant}_{period}.zip"
     if already_loaded(db, "eea", period, path):
         save_operation(db, run_id, "eea", period, "skipped", file_path=str(path))
         print(f"eea {period}: пропуск, файл уже загружен")
@@ -151,7 +150,7 @@ def download_eea(db, run_id, config, period_start, period_end):
     url = config["eea"]["url"]
     body = {
         "countries": [country],
-        "cities": [city],
+        "cities": [],
         "pollutants": [pollutant],
         "dataset": config["eea"]["dataset"],
         "source": "API",
@@ -176,9 +175,11 @@ def download_eea(db, run_id, config, period_start, period_end):
             with zipfile.ZipFile(temporary) as archive:
                 if archive.testzip() is not None:
                     raise ValueError("в ZIP-архиве обнаружен повреждённый файл")
-                parquet_files = [name for name in archive.namelist() if name.lower().endswith(".parquet")]
+                archive_files = [name for name in archive.namelist() if not name.endswith("/")]
+                parquet_files = [name for name in archive_files if name.lower().endswith(".parquet")]
                 if not parquet_files:
-                    raise ValueError("в архиве EEA нет файлов Parquet")
+                    archive_preview = ", ".join(archive_files[:5]) if archive_files else "архив пуст"
+                    raise ValueError(f"в архиве EEA нет файлов Parquet; содержимое: {archive_preview}")
         finally:
             temporary.unlink(missing_ok=True)
         atomic_save(path, content)
@@ -204,10 +205,10 @@ def download_eea(db, run_id, config, period_start, period_end):
 def download_weather(db, run_id, config, period_start, period_end):
     weather = config["open_meteo"]
     period = f"{period_start:%Y-%m}"
-    city = config["eea"]["city"]
     coordinates = f"{weather['latitude']}_{weather['longitude']}"
     partition = f"{period}_{coordinates}"
-    path = ROOT / config["data_dir"] / "raw" / "open_meteo" / f"weather_{city}_{partition}.json"
+    location = weather["location"]
+    path = ROOT / config["data_dir"] / "raw" / "open_meteo" / f"weather_{location}_{partition}.json"
     if already_loaded(db, "open_meteo", partition, path):
         save_operation(db, run_id, "open_meteo", partition, "skipped", file_path=str(path))
         print(f"open-meteo {partition}: пропуск, файл уже загружен")

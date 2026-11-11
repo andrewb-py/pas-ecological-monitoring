@@ -5,14 +5,13 @@
   "eea": {
     "url": "https://eeadmz1-downloads-api-appservice.azurewebsites.net/ParquetFile",
     "country": "PL",
-    "city": "Warsaw",
     "pollutant": "PM10",
     "dataset": 2
   },
   "open_meteo": {
     "url": "https://archive-api.open-meteo.com/v1/archive",
     "latitude": 52.22,
-    "longitude": 21.00,
+    "longitude": 21.0,
     "timezone": "Europe/Warsaw",
     "hourly": [
       "temperature_2m",
@@ -21,6 +20,7 @@
       "pressure_msl",
       "wind_speed_10m",
       "wind_direction_10m"
-    ]
+    ],
+    "location": "Warsaw"
   }
 }
