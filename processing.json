@@ -1,0 +1,17 @@
+{
+  "data_dir": "data",
+  "input": {
+    "eea_zip": "data/raw/eea/PL_PM10_2022-01.zip",
+    "weather_json": "data/raw/open_meteo/weather_Warsaw_2022-01_52.22_21.0.json"
+  },
+  "target_station": {
+    "station_id": "PL0140A",
+    "city": "Warszawa",
+    "station_name": "Al. Niepodległości 227/233",
+    "latitude": 52.219298,
+    "longitude": 21.004724,
+    "station_type": "traffic",
+    "station_area": "urban",
+    "metadata_source": "https://powietrze.gios.gov.pl/pjp/current/station_details/info/530"
+  }
+}
